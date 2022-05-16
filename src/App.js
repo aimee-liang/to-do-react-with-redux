@@ -32,8 +32,11 @@ function App() {
   
   const displayTasks = () => {
     state.tasks.forEach((task) => {
-      return <li>{task}</li>
-    })
+      return(
+        <ol>
+          <li>{task}</li>
+        </ol>
+    )})
   }
 
   const dispatchAndUpdate = () => {
