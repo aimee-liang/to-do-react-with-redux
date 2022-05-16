@@ -31,17 +31,14 @@ function App() {
   }
   
   const displayTasks = () => {
-    state.tasks.forEach((task) => {
-      return(
-        <ol>
-          <li>{task}</li>
-        </ol>
+    state.tasks.map((task, idx) => {
+      return (
+        <li id={idx}>{task}</li>
     )})
   }
 
-  const dispatchAndUpdate = () => {
-    store.dispatch({ type: "ADD", payload: task})
-    displayTasks()
+  const dispatchToStore = () => {
+    store.dispatch({type: "ADD", payload: task})
   }
 
   return (
@@ -49,7 +46,8 @@ function App() {
       <h2>To Do List</h2>
       <div>
         <input type="text" value={task} onChange={updateTask}></input>
-        <button onClick={dispatchAndUpdate}>ADD</button>
+        <button onClick={dispatchToStore}>ADD</button>
+        {state.tasks.length ? displayTasks() : ''}
       </div>
     </>
   );
