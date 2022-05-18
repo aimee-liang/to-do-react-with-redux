@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { legacy_createStore } from 'redux';
 import { combineReducers } from 'redux';
 
-function App() {
+export default function App() {
 
   const reducer = combineReducers({
     tasks: (state = [], action) => {
@@ -11,6 +11,7 @@ function App() {
       switch (action.type) {
         case "ADD":
           newState.push(action.payload)
+          displayTasks(newState)
         break;
         case "REMOVE":
           newState = newState.filter((task) => task !== action.payload)
@@ -23,22 +24,29 @@ function App() {
   })
   
   const store = legacy_createStore(reducer)
-  const state = store.getState()
+  // const state = store.getState()
   const [task, setTask] = useState("")
 
   const updateTask = e => {
     setTask(e.target.value)
   }
   
-  const displayTasks = () => {
-    state.tasks.map((task, idx) => {
+  const displayTasks = state => {
+    return state.forEach((task, index) => {
       return (
-        <li id={idx}>{task}</li>
+        <>
+          <li id={index}>{task}</li>
+          <button onClick={removeFromStore(index)}>COMPLETE</button>
+        </>
     )})
   }
 
-  const dispatchToStore = () => {
+  const addToStore = () => {
     store.dispatch({type: "ADD", payload: task})
+  }
+
+  const removeFromStore = () => {
+    store.dispatch({type: "REMOVE", payload: index})
   }
 
   return (
@@ -46,11 +54,8 @@ function App() {
       <h2>To Do List</h2>
       <div>
         <input type="text" value={task} onChange={updateTask}></input>
-        <button onClick={dispatchToStore}>ADD</button>
-        {state.tasks.length ? displayTasks() : ''}
+        <button onClick={addToStore}>ADD</button>
       </div>
     </>
   );
 }
-
-export default App;
